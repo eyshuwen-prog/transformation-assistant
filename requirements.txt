@@ -1,6 +1,5 @@
 streamlit==1.40.0
 graphviz
-import streamlit as st
 
 st.set_page_config(page_title="Methodology – Transformation Assistant", layout="wide")
 
@@ -178,3 +177,4 @@ st.markdown("""
   - implement access controls and logging,
   - conform to organisational data-classification policies.
 """)
+
