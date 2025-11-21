@@ -1,0 +1,180 @@
+streamlit==1.40.0
+graphviz
+import streamlit as st
+
+st.set_page_config(page_title="Methodology – Transformation Assistant", layout="wide")
+
+st.title("Methodology")
+st.write("This page explains how the Transformation Assistant prototype works behind the scenes.")
+
+# -------------------------------------------------------------
+# 1. OVERALL SYSTEM ARCHITECTURE
+# -------------------------------------------------------------
+st.header("1. Overall Architecture & Data Flow")
+
+st.markdown("""
+The **Transformation Assistant Prototype** is designed to analyse qualitative team communications
+to detect early transformation risks. The system architecture consists of four main layers:
+
+---
+
+### 1. User Interface (Streamlit)
+- User selects project context (project name, type, phase).
+- User pastes **meeting notes, email snippets, or text inputs**.
+- User clicks **Analyse** to trigger processing.
+
+---
+
+### 2. Pre-Processing Layer
+- Performs light cleaning of text:
+  - removes unnecessary spaces,
+  - normalises line breaks,
+  - prepares text for risk scoring.
+- In a production scenario, this is where:
+  - anonymisation / masking of names,
+  - removal of sensitive identifiers  
+  would happen.
+
+---
+
+### 3. Analysis Logic Layer
+In this prototype, the analysis is **rule-based** (keyword scanning).
+
+The engine:
+- identifies keywords associated with **high resistance signals**,  
+- identifies keywords associated with **early warning / confusion**,  
+- calculates a **risk score**,  
+- classifies the result into:
+  - **High risk** (e.g., strong resistance, delays, pushback),
+  - **Medium risk** (e.g., confusion, mild concerns),
+  - **Low risk** (little or no negative signals).
+
+In a full implementation, this layer could be replaced or enhanced with:
+- an **LLM** for sentiment analysis,
+- resistance pattern detection,
+- extraction of themes,
+- generation of tailored best-practice recommendations.
+
+---
+
+### 4. Output & Visualisation Layer
+The results are shown to the user through:
+- a **Risk Snapshot** (metric + severity icon),
+- an explanatory message,
+- recommended **next steps** based on change-management practices.
+
+These outputs are designed to help managers **intervene earlier** and **apply structured actions**.
+""")
+
+# -------------------------------------------------------------
+# 2. USE CASE 1 — Communications Risk Scanner
+# -------------------------------------------------------------
+st.header("2. Use Case 1 – Communications Risk Scanner")
+
+st.markdown("""
+### Textual Methodology Flow
+
+**Goal:** Analyse meeting notes or email content to detect early signs of resistance and suggest targeted actions.
+
+---
+
+### Step-by-Step Flow
+
+1. **User Input**
+   - User selects project context (name, type, phase)
+   - User pastes communication text (notes/emails)
+   - User clicks **Analyse**
+
+2. **Pre-Processing**
+   - Remove whitespace or formatting noise
+   - (Optional) Mask sensitive names/identifiers
+
+3. **Risk & Pattern Analysis**
+   - Prototype uses keyword-based scoring:
+     - e.g. “resist”, “complain”, “delay” → high-risk signals  
+     - e.g. “confused”, “worried”, “unclear” → medium-risk signals  
+   - Score determines the risk level:
+     - **High**, **Medium**, or **Low**
+
+4. **Result Aggregation**
+   - Combine:
+     - risk level,
+     - score explanation,
+     - short narrative message,
+     - suggested next steps
+
+5. **Visualisation in Streamlit**
+   - Display risk level using `st.metric`
+   - Show recommended actions as bullet points
+
+6. **(Optional – Future) Feedback Loop**
+   - Users may provide feedback or refine text for better analysis
+""")
+
+# -------------------------------------------------------------
+# 3. FLOWCHART (READY-MADE)
+# -------------------------------------------------------------
+st.header("3. Flowchart – Use Case 1 (Communications Risk Scanner)")
+
+st.markdown("""
+The diagram below shows the end-to-end flow for Use Case 1,
+from user input to final output in the Streamlit app.
+""")
+
+flowchart_dot = r"""
+digraph G {
+    rankdir=TB;
+    node [shape=rectangle, style=rounded, fontsize=11];
+
+    Start   [shape=circle, label="Start"];
+    Input   [label="User inputs\nproject context & text\n(Streamlit UI)"];
+    PreProc [label="Pre-process text\n(cleaning / masking)"];
+    Analyse [label="Analysis engine\n(rule-based scoring)"];
+    Aggregate [label="Aggregate results\n(risk level, score, message)"];
+    Display [label="Display output in\nStreamlit UI\n(metrics + actions)"];
+    End     [shape=circle, label="End"];
+
+    Start -> Input -> PreProc -> Analyse -> Aggregate -> Display -> End;
+}
+"""
+
+st.graphviz_chart(flowchart_dot)
+
+st.markdown("""
+**How to reuse this flowchart in slides:**
+
+- The same sequence can be redrawn in PowerPoint, diagrams.net or any flowchart tool:
+  1. Start  
+  2. User inputs project context & text (Streamlit)  
+  3. Pre-process text  
+  4. Analysis engine (rule-based / future LLM)  
+  5. Aggregate results  
+  6. Display output in Streamlit  
+  7. End  
+
+This satisfies the requirement for a clear methodology flow for the single use case in this prototype.
+""")
+
+# -------------------------------------------------------------
+# 4. IMPLEMENTATION DETAILS
+# -------------------------------------------------------------
+st.header("4. Implementation Details")
+
+st.markdown("""
+### Technology Stack
+
+- **Frontend & UI:** Streamlit  
+- **Logic Layer:** Python rule-based keyword scoring  
+- **Environment Management:**
+  - `venv` for isolated Python environments  
+  - `pip` + `requirements.txt` for reproducible dependencies  
+
+### Data Handling
+
+- Prototype is intended for **mock / anonymised text only**  
+- No real personal or sensitive data should be pasted into the app  
+- A production version would:
+  - integrate with secure data sources,
+  - implement access controls and logging,
+  - conform to organisational data-classification policies.
+""")
