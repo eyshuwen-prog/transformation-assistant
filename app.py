@@ -17,19 +17,38 @@ st.write(
 # --------------------------------------------------------------------
 # SIDEBAR: PROJECT CONTEXT
 # --------------------------------------------------------------------
-st.sidebar.header("Project Context")
-project_name = st.sidebar.text_input("Project name", "Finance System Rollout")
+st.sidebar.header("Project Scenario")
+
+st.sidebar.markdown(
+    """
+    Use these fields to **label your scenario** so that the AI can tailor its wording.
+    They **do not change the risk score** – they only personalise the summaries and scripts.
+    """
+)
+
+project_name = st.sidebar.text_input(
+    "Project name",
+    "Finance System Rollout",
+    help="Used to label the analysis and appear inside the AI-generated guidance."
+)
+
 project_type = st.sidebar.selectbox(
     "Type of transformation",
     ["System rollout", "Org restructure", "Policy change", "Process change", "Other"],
+    help="Helps the AI adjust examples to the type of change you are driving."
 )
+
 phase = st.sidebar.selectbox(
     "Current phase",
     ["Planning", "Pilot", "Rollout", "Stabilisation"],
+    help="Gives the AI context on where you are in the journey (e.g. planning vs rollout)."
 )
 
 st.sidebar.markdown("---")
-st.sidebar.caption("Prototype only – risk logic is simple keyword-based, augmented with LLM summaries.")
+st.sidebar.caption(
+    "This is a **prototype** – keyword risk logic is simple and deterministic; "
+    "LLM features are used only for summaries and suggested wording."
+)
 
 # --------------------------------------------------------------------
 # MAIN INPUT: TEAM COMMUNICATIONS
@@ -295,3 +314,4 @@ st.caption(
     f"({project_type}, phase: {phase}). "
     "Includes simple rule-based risk scoring plus LLM-powered summary and leadership guidance."
 )
+
